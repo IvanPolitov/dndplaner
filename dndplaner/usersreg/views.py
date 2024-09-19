@@ -35,12 +35,12 @@ def user_register(request):
         else:
             messages.error(request, 'Invalid')
     else:
-        form = CustomUserCreationForm()
+        form = CustomUserCreationForm
 
-        context = {
-            'form': form,
-        }
-        return render(request, 'usersreg/register.html', context=context)
+    context = {
+        'form': form,
+    }
+    return render(request, 'usersreg/register.html', context=context)
 
 
 def user_logout(request):

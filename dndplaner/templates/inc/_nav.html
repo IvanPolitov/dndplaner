@@ -1,35 +1,25 @@
-<nav>
-	<div>
 
-		<div>
-			<ul>
-				<li>
-					<a href="{% url 'main_window' %}">Главная</a>
-				</li>
-				{% comment %} <li>
-					<a href="{% url 'manual_add' %}">Добавить</a>
-				</li>	
-				<li>
-					<a href="{% url 'manual_add_file' %}">Добавить файлом</a>
-				</li>			 {% endcomment %}
-				{% if request.user.is_authenticated %}
-					<li>
-						UserUserUser
-					</li>
-				{% else %} 
-					<li>
-						QQQQQQQQQQQQ
-					</li>
-				{% endif %} 
-			</ul>
-
-			<span> 
-				{% if request.user.is_authenticated %}
-					Добро пожаловать, {{ user.username }} | <a href="{% url 'logout' %}">Logout</a> 
-				{% else %}
-					<a href="{% url 'register' %}">Register</a> | <a href="{% url 'login' %}">Login</a> 
-				{% endif %}
-			</span>
-		</div>
-	</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  	<div class="container-fluid">
+    	<a class="navbar-brand" href="{% url 'main_window' %}">Планнер</a>
+    	<div class="collapse navbar-collapse position-relative" id="navbarNav">
+    	  	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        		<li class="nav-item">
+    	    	  	<a class="nav-link" href="#">Список комнат</a>
+    	    	</li>
+    	    	<li class="nav-item">
+     	    	 	<a class="nav-link" href="#">Создать комнату</a>
+    	    	</li>
+      		</ul>
+			<div class='d-flex'>
+				<span class="navbar-text"> 
+					{% if request.user.is_authenticated %}
+						Добро пожаловать, {{ user.username }} | <a href="{% url 'logout' %}">Logout</a> 
+					{% else %}
+						<a href="{% url 'register' %}">Register</a> | <a href="{% url 'login' %}">Login</a> 
+					{% endif %}
+				</span>
+			</div>
+    	</div>
+  	</div>
 </nav>

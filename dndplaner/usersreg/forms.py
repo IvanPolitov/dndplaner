@@ -22,12 +22,14 @@ class CustomUserCreationForm(UserCreationForm):
         attrs={'class': 'form-control'}))
     last_name = forms.CharField(label='Last Name', max_length=30, widget=forms.TextInput(
         attrs={'class': 'form-control'}))
-    email = forms.EmailField(label='Email', max_length=30, widget=forms.TextInput(
+    email = forms.EmailField(label='Email', widget=forms.TextInput(
         attrs={'class': 'form-control'}))
     password1 = forms.CharField(
-        label='Password', max_length=30, widget=forms.PasswordInput())
+        label='Password', max_length=30, widget=forms.PasswordInput(
+            attrs={'class': 'form-control'}))
     password2 = forms.CharField(
-        label='Confirm Password', max_length=30, widget=forms.PasswordInput())
+        label='Confirm Password', max_length=30, widget=forms.PasswordInput(
+            attrs={'class': 'form-control'}))
 
     class Meta:
         model = CustomUser
