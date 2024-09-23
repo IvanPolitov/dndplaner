@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}
+{{title}}
+{% endblock title %}
+
+{% block body %}
+<h1>Профиль</h1>
+ 
+<form method="post">
+    {% csrf_token %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    <div class="row justify-content-center mb-5 mt-5">
+    <div class="col-md-3 col-md-offset-5 text-center">
+    {% for f in form %}
+
+    <p ><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
+    <div class="form-error">{{ f.errors }}</div>
+
+    {% endfor %}
+    <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+    </div></div>
+</form>
+<hr>
+<p ><a href="{% url 'password_change' %}">Сменить пароль</a></p>
+{% endblock body %}

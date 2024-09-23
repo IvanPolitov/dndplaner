@@ -14,7 +14,7 @@
 			<div class='d-flex'>
 				<span class="navbar-text"> 
 					{% if request.user.is_authenticated %}
-						Добро пожаловать, {{ user.username }} | <a href="{% url 'logout' %}">Logout</a> 
+						Добро пожаловать, <a href="{% url 'profile' %}">{{ user.username }}</a> | <a href="{% url 'logout' %}">Logout</a> 
 					{% else %}
 						<a href="{% url 'register' %}">Register</a> | <a href="{% url 'login' %}">Login</a> 
 					{% endif %}

@@ -136,3 +136,8 @@ AUTH_USER_MODEL = 'usersreg.CustomUser'
 LOGIN_REDIRECT_URL = 'main_window'
 LOGOUT_REDIRECT_URL = 'main_window'
 LOGIN_URL = '/login/'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'usersreg.authentication.CustomEmailBackend',
+]
