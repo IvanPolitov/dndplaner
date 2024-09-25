@@ -5,12 +5,18 @@
 
 {% block body %}
 <h1>Профиль</h1>
- 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-error">{{ form.non_field_errors }}</div>
     <div class="row justify-content-center mb-5 mt-5">
     <div class="col-md-3 col-md-offset-5 text-center">
+
+    {% if user.photo %}
+    <p ><img src="{{ user.photo.url }}">
+    {% else %}
+    <p ><img src="{{ default_image }}">
+    {% endif %}
+
     {% for f in form %}
 
     <p ><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>

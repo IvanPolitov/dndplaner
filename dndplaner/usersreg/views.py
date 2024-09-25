@@ -1,3 +1,4 @@
+import dndplaner.settings
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
@@ -34,7 +35,8 @@ class ProfileUser(LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = ProfileUserForm
     template_name = 'usersreg/profile.html'
-    extra_context = {'title': 'Профиль пользователя'}
+    extra_context = {'title': "Профиль пользователя",
+                     'default_image': dndplaner.settings.DEFAULT_USER_IMAGE}
 
     def get_success_url(self) -> str:
         return reverse_lazy('profile')
