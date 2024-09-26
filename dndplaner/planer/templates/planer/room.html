@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{% endblock title %}
+
+
+{% block body %}
+<div>
+    Здравствуйте <br>
+    Здесь ведутся строительные работы <br>
+</div>
+<br>
+<div> 
+    {{ room.name }}<br>
+    {{ room.slug }}<br>
+        {{ room.description }}<br>
+            {{ room.master }}<br>
+    {% with room.players.all as players %}
+    Игроки:<br>
+        {% for p in players %}
+                        {{ p.first_name }}<br>
+        {% endfor %}
+    это все<br>
+    {% endwith %}
+
+</div>
+
+{% endblock body %}
