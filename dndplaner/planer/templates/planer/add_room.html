@@ -6,9 +6,25 @@
 
 
 {% block body %}
+
 <div>
-    Здравствуйте <br>
-    Здесь ведутся строительные работы <br>
-    Вьюшка: {{ view_name }}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 </div>
+
+<div class="row justify-content-center mb-5 mt-5">
+    <div class="col-md-3 col-md-offset-5 text-center">
+        <h1>Создание комнаты</h1>
+        <form method="post">
+            {% csrf_token %} 
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary btn-block">Создать</button>
+        </form>
+    </div>
+</div> 
 {% endblock body %}

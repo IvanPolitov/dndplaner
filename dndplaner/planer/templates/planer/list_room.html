@@ -1,14 +1,56 @@
-{% extends "base.html" %}
-
-{% block title %}
-
-{% endblock title %}
-
-
-{% block body %}
-<div>
-    Здравствуйте <br>
-    Здесь ведутся строительные работы <br>
-    Вьюшка: {{ view_name }}
+{% extends "base.html" %} {% block title %} {% endblock title %} {% block body %}
+<div class="row justify-content-center mb-5 mt-5">
+	<div class="col-md-3 col-md-offset-5 text-center">
+        {% with rooms.all as rooms %}
+        {% for room in rooms %}
+		<div class="card">
+			Комната: <a href={{room.slug}}>{{ room.name }}</a>
+			<br />
+			<div class="card-body">
+				Описание:
+				<br />{{ room.description }}<br />
+				Мастер: {{ room.master.first_name }} {{ room.master.last_name }}<br />
+				{% with room.players.all as players %} Игроки:<br />
+				{% for p in players %} {{ p.first_name }}<br />
+				{% endfor %} {% endwith %}
+			</div>
+		</div>
+        <br />
+        {% endfor %}{% endwith %}
+	</div>
 </div>
+
+{% if page_obj.has_other_pages %}
+<nav class="list-pages">
+    <ul class="pagination">
+		{% if page_obj.has_previous %}
+		<li class="page-item">
+			<a class="page-link" href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+		</li>
+		{% endif %}
+
+        {% for p in paginator.page_range %}
+
+		{% if page_obj.number == p %}
+        <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ p }}</span>
+        </li>   
+
+		{% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+        </li>
+		{% endif %}
+
+        {% endfor %}
+
+		{% if page_obj.has_next %}
+		<li class="page-item">
+			<a class="page-link" href="?page={{ page_obj.next_page_number }}">&gt;</a>
+		</li>
+		{% endif %}
+
+    </ul>
+</nav>
+{% endif %}
 {% endblock body %}
