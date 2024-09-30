@@ -22,9 +22,14 @@
             
             {% if user not in players %}
             <form method="post">
-                {% csrf_token %} 
-                <button type="submit" class="btn btn-primary btn-block">Войти</button>
+                {% csrf_token %}
+                <button class="btn btn-sm btn-primary btn-follow">Войти</button>
             </form>
+            {% else %}
+            <form method="post">
+                {% csrf_token %} 
+                <button class="btn btn-sm btn-danger btn-follow">Выйти</button>
+            </form>            
             {% endif %}
             {% endwith %}
         </div></div>

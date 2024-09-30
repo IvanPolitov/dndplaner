@@ -18,4 +18,7 @@ class RoomForm(forms.ModelForm):
         }
 
 
-    
+class EnterRoomForm(forms.ModelForm):
+    class Meta:
+        model = Room
+        fields = ()

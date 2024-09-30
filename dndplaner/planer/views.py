@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Room
-from .forms import RoomForm
+from .forms import RoomForm, EnterRoomForm
 
 
 def main(request):
@@ -31,15 +31,12 @@ def translit_to_eng(s: str) -> str:
     return "".join(map(lambda x: d[x] if d.get(x, False) else x, s.lower()))
 
 
-class RoomDetailView(DetailView, FormMixin):
+class RoomDetailView(UpdateView):
     model = Room
-    form_class = None
+    form_class = EnterRoomForm
     template_name = "planer/room.html"
     context_object_name = 'room'
     slug_url_kwarg = 'room_slug'
-
-    def get_form(self, form_class: type | None = ...) -> BaseForm:
-        return None
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -51,9 +48,12 @@ class RoomDetailView(DetailView, FormMixin):
     def post(self, request, *args, **kwargs):
         print(request.POST)
         room = self.get_object()
-        room.players.add(self.request.user)
-        room.save()
-        return self.get(request, *args, **kwargs)
+        if room.players.filter(id=self.request.user.id).exists():
+            room.players.remove(self.request.user)
+        else:
+            room.players.add(self.request.user)
+            room.save()
+        return redirect(room)
 
 
 class AddRoomView(CreateView):
@@ -85,3 +85,20 @@ class RoomListView(ListView):
 
     def get_queryset(self):
         return super().get_queryset()
+
+
+class MyRoomsView(ListView):
+    model = Room
+    template_name = 'planer/list_user_room.html'
+    context_object_name = 'rooms'
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self):
+
+        queryset = Room.objects.filter(players__id=self.request.user.id)
+
+        return queryset
