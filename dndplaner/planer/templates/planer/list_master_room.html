@@ -2,13 +2,9 @@
 <div class="row justify-content-center mb-5 mt-5">
 	<div class="col-md-3 col-md-offset-5 text-center">
         {% with rooms.all as rooms %}
-		<form action="{% url 'list_room' %}" method="GET">
-        	<input type="search" name="room_name" class="form-control" placeholder="Найти комнату по названию">
-			<button class="btn btn-sm btn-primary btn-follow">Найти</button>
-		</form>
         {% for room in rooms %}
 		<div class="card">
-			Комната: <a href={{room.slug}}>{{ room.name }}</a>
+			Комната: <a href="{% url 'room' room_slug=room.slug %}">{{ room.name }}</a>
 			<br />
 			<div class="card-body">
 				Описание:

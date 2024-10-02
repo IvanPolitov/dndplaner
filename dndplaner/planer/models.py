@@ -10,6 +10,7 @@ class Room(models.Model):
         'usersreg.CustomUser', on_delete=models.PROTECT, null=True)
     players = models.ManyToManyField(
         'usersreg.CustomUser', related_name='players')
+    date = models.DateTimeField()
 
     def get_absolute_url(self):
         return reverse('room', kwargs={'room_slug': self.slug})

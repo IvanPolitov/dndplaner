@@ -79,15 +79,26 @@ class RoomListView(ListView):
     context_object_name = 'rooms'
     paginate_by = 3
 
+    search_room_name = ''
+
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         return context
 
     def get_queryset(self):
+        print(self.search_room_name)
+        if self.search_room_name:
+            queryset = Room.objects.filter(name__iregex=self.search_room_name)
+            self.paginate_by = None
+            return queryset
         return super().get_queryset()
 
+    def get(self, request, *args, **kwargs):
+        self.search_room_name = request.GET.get('room_name')
+        return super().get(self, request, *args, **kwargs)
 
-class MyRoomsView(ListView):
+
+class MyGamesView(ListView):
     model = Room
     template_name = 'planer/list_user_room.html'
     context_object_name = 'rooms'
@@ -98,7 +109,20 @@ class MyRoomsView(ListView):
         return context
 
     def get_queryset(self):
-
         queryset = Room.objects.filter(players__id=self.request.user.id)
+        return queryset
 
+
+class MyRoomsView(ListView):
+    model = Room
+    template_name = 'planer/list_master_room.html'
+    context_object_name = 'rooms'
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self):
+        queryset = Room.objects.filter(master__id=self.request.user.id)
         return queryset
