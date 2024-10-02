@@ -1,6 +1,11 @@
 {% extends "base.html" %} {% block title %} {% endblock title %} {% block body %}
 <div class="row justify-content-center mb-5 mt-5">
 	<div class="col-md-3 col-md-offset-5 text-center">
+		{% for date in dates %}
+			<a href='?date_room={{ date }}'>{{ date }}</a>
+		{% endfor %}
+
+
         {% with rooms.all as rooms %}
 		<form action="{% url 'list_room' %}" method="GET">
         	<input type="search" name="room_name" class="form-control" placeholder="Найти комнату по названию">
@@ -10,6 +15,7 @@
 		<div class="card">
 			Комната: <a href={{room.slug}}>{{ room.name }}</a>
 			<br />
+			Дата: {{ room.date |date:"d.m.Y H:i"}}			<br />
 			<div class="card-body">
 				Описание:
 				<br />{{ room.description }}<br />

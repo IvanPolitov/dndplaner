@@ -7,7 +7,7 @@ class Room(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     description = models.TextField(blank=True)
     master = models.ForeignKey(
-        'usersreg.CustomUser', on_delete=models.PROTECT, null=True)
+        'usersreg.CustomUser', on_delete=models.CASCADE)
     players = models.ManyToManyField(
         'usersreg.CustomUser', related_name='players')
     date = models.DateTimeField()

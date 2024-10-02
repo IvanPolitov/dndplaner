@@ -6,6 +6,7 @@
 		<div class="card">
 			Комната: <a href="{% url 'room' room_slug=room.slug %}">{{ room.name }}</a>
 			<br />
+			Дата: {{ room.date |date:"d.m.Y H:i"}}			<br />
 			<div class="card-body">
 				Описание:
 				<br />{{ room.description }}<br />

@@ -4,11 +4,28 @@
 
 {% endblock title %}
 
-
 {% block body %}
-<div>
-    Здравствуйте <br>
-    Здесь ведутся строительные работы <br>
-    Вьюшка: {{ view_name }}
+<div class="row justify-content-center mb-5 mt-5">
+	<div class="col-md-3 col-md-offset-5 text-center">
+        {% with rooms.all as rooms %}
+        {% for room in rooms %}
+		<div class="card">
+			Комната: <a href="{% url 'room' room_slug=room.slug %}">{{ room.name }}</a>
+			<br />
+            Дата: {{ room.date |date:"d.m.Y H:i"}}			<br />
+			<div class="card-body">
+				Описание:
+				<br />{{ room.description }}<br />
+				Мастер: {{ room.master.first_name }} {{ room.master.last_name }}<br />
+				{% with room.players.all as players %} Игроки:<br />
+				{% for p in players %} {{ p.first_name }}<br />
+				{% endfor %} {% endwith %}
+			</div>
+		</div>
+        <br />
+        {% endfor %}{% endwith %}
+	</div>
 </div>
+
+
 {% endblock body %}

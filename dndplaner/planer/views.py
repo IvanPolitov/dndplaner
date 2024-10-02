@@ -14,11 +14,18 @@ from .models import Room
 from .forms import RoomForm, EnterRoomForm
 
 
-def main(request):
-    context = {
-        'view_name': 'main',
-    }
-    return render(request, 'planer/main.html', context=context)
+class MainListView(ListView):
+    model = Room
+    template_name = 'planer/main.html'
+    context_object_name = 'rooms'
+
+    def get_queryset(self):
+        queryset = Room.objects.filter(
+            players__id=self.request.user.id).order_by('date')
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        return super().get(self, request, *args, **kwargs)
 
 
 def translit_to_eng(s: str) -> str:
@@ -46,7 +53,6 @@ class RoomDetailView(UpdateView):
         return get_object_or_404(Room, slug=self.kwargs[self.slug_url_kwarg])
 
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         room = self.get_object()
         if room.players.filter(id=self.request.user.id).exists():
             room.players.remove(self.request.user)
@@ -80,21 +86,33 @@ class RoomListView(ListView):
     paginate_by = 3
 
     search_room_name = ''
+    date_room = ''
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+
         context = super().get_context_data(**kwargs)
         return context
 
     def get_queryset(self):
-        print(self.search_room_name)
+        self.extra_context = {
+            'dates': list(map(lambda x: str(x['date'].date()), Room.objects.all().order_by('date').values('date'))),
+        }
+        # print(self.extra_context['dates'][0]['date'].date())
+        # print(self.extra_context['dates'])
         if self.search_room_name:
             queryset = Room.objects.filter(name__iregex=self.search_room_name)
+            self.paginate_by = None
+            return queryset
+        if self.date_room:
+            queryset = Room.objects.filter(date__date__exact=self.date_room)
             self.paginate_by = None
             return queryset
         return super().get_queryset()
 
     def get(self, request, *args, **kwargs):
         self.search_room_name = request.GET.get('room_name')
+        self.date_room = request.GET.get('date_room')
+
         return super().get(self, request, *args, **kwargs)
 
 

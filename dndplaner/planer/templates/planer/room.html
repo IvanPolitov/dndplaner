@@ -10,6 +10,7 @@
     <div class="col-md-3 col-md-offset-5 text-center"> 
         <div class="card">
                 Комната: {{ room.name }}<br>
+                Дата: {{ room.date |date:"d.m.Y H:i"}}			<br />
   <div class="card-body">
         Описание: 
         <br>{{ room.description }}<br>

@@ -7,14 +7,16 @@ from .models import Room
 class RoomForm(forms.ModelForm):
     class Meta:
         model = Room
-        fields = ['name', 'description']
+        fields = ['name', 'description', 'date']
         labels = {
             'name': 'Название',
             'description': 'Описание',
+            'date': 'Дата игры',
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateTimeInput(),
         }
 
 
