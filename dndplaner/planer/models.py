@@ -14,3 +14,11 @@ class Room(models.Model):
 
     def get_absolute_url(self):
         return reverse('room', kwargs={'room_slug': self.slug})
+
+
+class Message(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        'usersreg.CustomUser', on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)

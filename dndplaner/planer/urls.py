@@ -1,6 +1,7 @@
 
 from django.urls import path
 from .views import *
+from django.http import HttpResponse
 
 
 urlpatterns = [
@@ -10,4 +11,5 @@ urlpatterns = [
     path('rooms/', RoomListView.as_view(), name='list_room'),
     path('my_games/', MyGamesView.as_view(), name='my_games'),
     path('my_rooms/', MyRoomsView.as_view(), name='my_rooms'),
+    path('test/', test, name='test'),
 ]

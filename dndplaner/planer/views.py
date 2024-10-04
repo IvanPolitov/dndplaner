@@ -14,6 +14,10 @@ from .models import Room
 from .forms import RoomForm, EnterRoomForm
 
 
+def test(request):
+    return render(request, 'planer/test.html')
+
+
 class MainListView(ListView):
     model = Room
     template_name = 'planer/main.html'
