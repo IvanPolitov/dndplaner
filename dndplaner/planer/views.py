@@ -1,3 +1,5 @@
+from .forms import RoomForm, EnterRoomForm
+from .models import Room
 from django.forms import BaseModelForm
 from django.forms.forms import BaseForm
 from django.http import HttpRequest, HttpResponse
@@ -10,8 +12,7 @@ from django.views.generic.edit import FormMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .models import Room
-from .forms import RoomForm, EnterRoomForm
+from django.db.models import Q
 
 
 def test(request):
@@ -24,8 +25,8 @@ class MainListView(ListView):
     context_object_name = 'rooms'
 
     def get_queryset(self):
-        queryset = Room.objects.filter(
-            players__id=self.request.user.id).order_by('date')
+        queryset = Room.objects.filter(Q(players__id=self.request.user.id) | Q(
+            master__id=self.request.user.id)).order_by('date')
         return queryset
 
     def get(self, request, *args, **kwargs):
