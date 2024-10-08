@@ -21,7 +21,8 @@
                 {{ p.first_name }}<br>
             {% endfor %}
             
-            {% if user not in players %}
+            {% if user != room.master%}
+            {% if user not in players%}
             <form method="post">
                 {% csrf_token %}
                 <button class="btn btn-sm btn-primary btn-follow">Войти</button>
@@ -31,6 +32,7 @@
                 {% csrf_token %} 
                 <button class="btn btn-sm btn-danger btn-follow">Выйти</button>
             </form>            
+            {% endif %}
             {% endif %}
             {% endwith %}
         </div></div>

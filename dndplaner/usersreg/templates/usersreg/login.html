@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ title }}
+
 {% endblock %}
 
 {%block body %}
@@ -17,8 +17,8 @@
 
             <button type="submit" class="btn btn-primary btn-block">Login</button>
         </form>
+        <p ><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
     </div>
 </div>  
-<p ><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
 {% endblock %}
 

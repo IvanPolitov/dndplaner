@@ -13,13 +13,15 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 
 
 def test(request):
     return render(request, 'planer/test.html')
 
 
-class MainListView(ListView):
+class MainListView(LoginRequiredMixin, ListView):
     model = Room
     template_name = 'planer/main.html'
     context_object_name = 'rooms'
@@ -43,7 +45,7 @@ def translit_to_eng(s: str) -> str:
     return "".join(map(lambda x: d[x] if d.get(x, False) else x, s.lower()))
 
 
-class RoomDetailView(UpdateView):
+class RoomDetailView(LoginRequiredMixin, UpdateView):
     model = Room
     form_class = EnterRoomForm
     template_name = "planer/room.html"
@@ -59,6 +61,9 @@ class RoomDetailView(UpdateView):
 
     def post(self, request, *args, **kwargs):
         room = self.get_object()
+        if room.master == self.request.user:
+            return redirect(room)
+
         if room.players.filter(id=self.request.user.id).exists():
             room.players.remove(self.request.user)
         else:
@@ -67,7 +72,7 @@ class RoomDetailView(UpdateView):
         return redirect(room)
 
 
-class AddRoomView(CreateView):
+class AddRoomView(LoginRequiredMixin, CreateView):
     form_class = RoomForm
     template_name = 'planer/add_room.html'
     success_url = reverse_lazy('list_room')
@@ -77,18 +82,19 @@ class AddRoomView(CreateView):
         form.cleaned_data['master'] = self.request.user
         slug_in_db = Room.objects.filter(slug=form.cleaned_data['slug'])
         if slug_in_db:
-            messages.error(self.request, 'Такого нет')
+
+            messages.error(self.request, 'Комната с таким названием уже есть')
             return self.render_to_response(self.get_context_data(form=form))
 
         room = Room.objects.create(**form.cleaned_data)
         return redirect(room)
 
 
-class RoomListView(ListView):
+class RoomListView(LoginRequiredMixin, ListView):
     model = Room
     template_name = 'planer/list_room.html'
     context_object_name = 'rooms'
-    paginate_by = 3
+    paginate_by = 9
 
     search_room_name = ''
     date_room = ''
@@ -99,8 +105,9 @@ class RoomListView(ListView):
         return context
 
     def get_queryset(self):
+
         self.extra_context = {
-            'dates': list(map(lambda x: str(x['date'].date()), Room.objects.all().order_by('date').values('date'))),
+            'dates': sorted(list(set(map(lambda x: str(x['date'].date()), Room.objects.all().order_by('date').values('date'))))),
         }
         # print(self.extra_context['dates'][0]['date'].date())
         # print(self.extra_context['dates'])
@@ -121,7 +128,7 @@ class RoomListView(ListView):
         return super().get(self, request, *args, **kwargs)
 
 
-class MyGamesView(ListView):
+class MyGamesView(LoginRequiredMixin, ListView):
     model = Room
     template_name = 'planer/list_user_room.html'
     context_object_name = 'rooms'
@@ -136,7 +143,7 @@ class MyGamesView(ListView):
         return queryset
 
 
-class MyRoomsView(ListView):
+class MyRoomsView(LoginRequiredMixin, ListView):
     model = Room
     template_name = 'planer/list_master_room.html'
     context_object_name = 'rooms'

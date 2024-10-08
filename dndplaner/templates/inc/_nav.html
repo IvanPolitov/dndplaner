@@ -3,19 +3,23 @@
   	<div class="container-fluid">
     	<a class="navbar-brand" href="{% url 'main_window' %}">Планнер</a>
     	<div class="collapse navbar-collapse position-relative" id="navbarNav">
-    	  	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				{% if request.user.is_authenticated %}
         		<li class="nav-item">
     	    	  	<a class="nav-link" href="{% url 'list_room' %}">Список комнат</a>
     	    	</li>
     	    	<li class="nav-item">
      	    	 	<a class="nav-link" href="{% url 'add_room' %}">Создать комнату</a>
     	    	</li>
+				{% comment "Уже не нужно, всё выводится на main" %}
     	    	<li class="nav-item">
      	    	 	<a class="nav-link" href="{% url 'my_games' %}">Мои игры</a>
     	    	</li>
 		    	<li class="nav-item">
      	    	 	<a class="nav-link" href="{% url 'my_rooms' %}">Мои комнаты</a>
     	    	</li>
+				{% endcomment %}
+				{% endif %}
       		</ul>
 			<div class='d-flex'>
 				<span class="navbar-text"> 

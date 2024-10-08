@@ -5,6 +5,60 @@
 {% endblock title %}
 
 {% block body %}
+
+{% with rooms.all as rooms %}
+<h1 class="text-center">Мастер</h1>
+	{% for room in rooms %} 		{% if room.master.id == user.id %}
+		<div class="container">
+			<div class="card mb-3">
+				<div class="row g-0">
+					<div class="col-md-2 text-center">
+						<div>	
+							<h3>{{ room.date |date:"d.m.Y"}}</h3>
+							<br>	
+							<h3>{{ room.date |date:"H:i"}}</h3>
+						</div>	
+			{#  <img src="..." class="img-fluid rounded-start" alt="..."> #}
+					</div>
+					<div class="col-md-8">
+						<div class="card-body">
+							<h5 class="card-title"><a href={{room.slug}}>{{ room.name }}</a></h5>
+							<p class="card-text">{{ room.description }}</p>
+							<p class="card-text"><small class="text-muted">Мастер: {{ room.master.first_name }} {{ room.master.last_name }}<br /></small></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}			{% endfor %}
+							<br>							<br>							<br><br><br><br>
+<h1 class="text-center">Игрок</h1>
+	{% for room in rooms %} 		{% if room.master.id == user.id %}
+		<div class="container">
+			<div class="card mb-3">
+				<div class="row g-0">
+					<div class="col-md-2 text-center">
+						<div>	
+							<h3>{{ room.date |date:"d.m.Y"}}</h3>
+							<br>	
+							<h3>{{ room.date |date:"H:i"}}</h3>
+						</div>	
+			{#  <img src="..." class="img-fluid rounded-start" alt="..."> #}
+					</div>
+					<div class="col-md-8">
+						<div class="card-body">
+							<h5 class="card-title"><a href={{room.slug}}>{{ room.name }}</a></h5>
+							<p class="card-text">{{ room.description }}</p>
+							<p class="card-text"><small class="text-muted">Мастер: {{ room.master.first_name }} {{ room.master.last_name }}<br /></small></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}			{% endfor %}
+{% endwith %}
+
+{% comment "" %}
 <div class="row justify-content-center mb-5 mt-5">
 	<div class="col-md-3 col-md-offset-5 text-center">
         {% with rooms.all as rooms %}
@@ -55,6 +109,6 @@
 		{% endwith %}
 	</div>
 </div>
-
+{% endcomment %}
 
 {% endblock body %}
