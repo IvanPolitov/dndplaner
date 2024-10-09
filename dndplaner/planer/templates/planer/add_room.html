@@ -6,15 +6,14 @@
 
 
 {% block body %}
-
 <div>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </div>
 
 <div class="row justify-content-center mb-5 mt-5">
@@ -24,24 +23,23 @@
             {% csrf_token %} 
             <label for="{{ form.name.id_for_label}}" class="form-label">Название</label>
             {{ form.name }}
- <div class="form-error">
- {{ form.name.errors }}
-</div>
+
+            <div class="form-error">
+                {{ form.name.errors }}
+            </div>
+
             <label for="{{ form.description.id_for_label}}" class="form-label">Описание</label>           
             {{ form.description }}
- <div class="form-error">
-{{ form.description.errors }}
+            <div class="form-error">
+                {{ form.description.errors }}
+            </div>
 
-</div>
             <label for="{{ form.date.id_for_label}}" class="form-label">Дата</label>
-            <input
-                id="date"
-                type="datetime-local"
-                name="date"
-                value="" />
-             <div class="form-error">
+            <input id="date" type="datetime-local" name="date" value="" />
+            <div class="form-error">
                 {{ form.date.errors }}
             </div>
+            
             <button type="submit" class="btn btn-primary btn-block">Создать</button>
         </form>
     </div>

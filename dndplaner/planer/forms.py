@@ -50,3 +50,9 @@ class EnterRoomForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = ()
+
+
+class DeleteRoomForm(forms.ModelForm):
+    class Meta:
+        model = Room
+        fields = ()

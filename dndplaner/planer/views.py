@@ -1,4 +1,4 @@
-from .forms import RoomForm, EnterRoomForm
+from .forms import RoomForm, EnterRoomForm, DeleteRoomForm
 from .models import Room
 from django.forms import BaseModelForm
 from django.forms.forms import BaseForm
@@ -8,7 +8,7 @@ from typing import Any
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from django.views.generic import ListView
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, DeleteView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -90,6 +90,14 @@ class AddRoomView(LoginRequiredMixin, CreateView):
         return redirect(room)
 
 
+class DeleteRoomView(LoginRequiredMixin, DeleteView):
+    model = Room
+    success_url = reverse_lazy('list_room')
+    template_name = 'planer/room_confirm_delete.html'
+    form = DeleteRoomForm
+    slug_url_kwarg = 'room_slug'
+
+
 class RoomListView(LoginRequiredMixin, ListView):
     model = Room
     template_name = 'planer/list_room.html'
@@ -109,8 +117,6 @@ class RoomListView(LoginRequiredMixin, ListView):
         self.extra_context = {
             'dates': sorted(list(set(map(lambda x: str(x['date'].date()), Room.objects.all().order_by('date').values('date'))))),
         }
-        # print(self.extra_context['dates'][0]['date'].date())
-        # print(self.extra_context['dates'])
         if self.search_room_name:
             queryset = Room.objects.filter(name__iregex=self.search_room_name)
             self.paginate_by = None

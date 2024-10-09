@@ -6,36 +6,51 @@
 
 
 {% block body %}
-<div class="row justify-content-center mb-5 mt-5">
-    <div class="col-md-3 col-md-offset-5 text-center"> 
-        <div class="card">
-                Комната: {{ room.name }}<br>
-                Дата: {{ room.date |date:"d.m.Y H:i"}}			<br />
-  <div class="card-body">
-        Описание: 
-        <br>{{ room.description }}<br>
-        Мастер:  {{ room.master.first_name }} {{ room.master.last_name }}<br>
-        {% with room.players.all as players %}
-        Игроки:<br>
-            {% for p in players %}
-                {{ p.first_name }}<br>
-            {% endfor %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="card mb-3">
+            <div class="col-12 col-md-offset-5 text-center"> 
+                <h2>{{ room.name }}</h2><small class="text-muted"> by {{ room.master.first_name }} {{ room.master.last_name }}</small>
+                {% if user == room.master %}
+                    
+                    <a href="{{room.slug}}/delete"><button class="btn btn-sm btn-danger btn-follow">Удалить</button></a>
+                {% endif %}
+                <br>{{ room.date |date:"d.m.Y H:i"}}<br>
+                <br>
+                <div class='row g-0'>
+                    <div class='col-md-9 text-center'>
+                        {{ room.description }}<br>
+                    </div>
+                    <div class="col text-center"> 
+
+                        {% with room.players.all as players %}
+                            Игроки:<br>
+                            {% for p in players %}
+                                {{ p.first_name }}<br>
+                            {% endfor %}
             
-            {% if user != room.master%}
-            {% if user not in players%}
-            <form method="post">
-                {% csrf_token %}
-                <button class="btn btn-sm btn-primary btn-follow">Войти</button>
-            </form>
-            {% else %}
-            <form method="post">
-                {% csrf_token %} 
-                <button class="btn btn-sm btn-danger btn-follow">Выйти</button>
-            </form>            
-            {% endif %}
-            {% endif %}
-            {% endwith %}
-        </div></div>
-    </div>     </div> 
+            
+                            {% if user != room.master%}
+                                {% if user not in players%}
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <button class="btn btn-sm btn-primary btn-follow">Войти</button>
+                                    </form>
+                                {% else %}
+                                    <form method="post">
+                                        {% csrf_token %} 
+                                        <button class="btn btn-sm btn-danger btn-follow">Выйти</button>
+                                    </form>            
+                                {% endif %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>     
+                </div>
+            </div>
+        </div>   
+    </div>
+</div>
 
 {% endblock body %}
+    

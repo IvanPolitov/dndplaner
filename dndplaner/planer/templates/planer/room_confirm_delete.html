@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock title %}
+{% block body %}
+
+ 
+<div class="row justify-content-center mb-5 mt-5">
+    <div class="col-md-3 col-md-offset-5 text-center">
+        <h1>Вы уверены?</h1>
+        <form method="post">
+            {% csrf_token %}
+                <p>Are you sure you want to delete "{{ object.name }}"?</p>
+        
+            <p ><button class="btn btn-sm btn-danger btn-follow">Да</button></p>
+        </form>
+        <a href="{% url 'main_window' %}"><button class="btn btn-sm btn-primary btn-follow">Назад</button></a>
+    </div>
+</div> 
+
+{% endblock %}
