@@ -14,4 +14,5 @@ urlpatterns = [
     path('my_games/', MyGamesView.as_view(), name='my_games'),
     path('my_rooms/', MyRoomsView.as_view(), name='my_rooms'),
     path('test/', test, name='test'),
+    path('add_message/', AddMessageView.as_view(), name='add_message'),
 ]

@@ -1,3 +1,4 @@
+import json
 from typing import Any, Collection
 from django.db import models
 from django.urls import reverse
@@ -22,12 +23,15 @@ class Room(models.Model):
         c = super().from_db(db, field_names, values)
         if c.date.date() < datetime.now().date():
             c.delete()
+            return
         return c
+
+
 
 
 class Message(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     author = models.ForeignKey(
-        'usersreg.CustomUser', on_delete=models.CASCADE)
+        'usersreg.CustomUser', on_delete=models.PROTECT)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

@@ -1,9 +1,8 @@
-from .forms import RoomForm, EnterRoomForm, DeleteRoomForm
-from .models import Room
-from django.forms import BaseModelForm
-from django.forms.forms import BaseForm
+import json
+from .forms import RoomForm, EnterRoomForm, DeleteRoomForm, MessageForm
+from .models import Room, Message
 from django.http import HttpRequest, HttpResponse
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, FormView
 from typing import Any
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
@@ -15,6 +14,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
+from django.core import serializers
 
 
 def test(request):
@@ -54,6 +54,12 @@ class RoomDetailView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        message_form = MessageForm()
+        comments = Message.objects.filter(
+            room__slug=self.kwargs[self.slug_url_kwarg]).order_by('-timestamp')
+
+        context['message'] = message_form
+        context['comments'] = comments
         return context
 
     def get_object(self, quearyset=None, *args, **kwargs):
@@ -70,6 +76,10 @@ class RoomDetailView(LoginRequiredMixin, UpdateView):
             room.players.add(self.request.user)
             room.save()
         return redirect(room)
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any):
+        q = super().get(request, *args, **kwargs)
+        return q
 
 
 class AddRoomView(LoginRequiredMixin, CreateView):
@@ -162,3 +172,24 @@ class MyRoomsView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = Room.objects.filter(master__id=self.request.user.id)
         return queryset
+
+
+class AddMessageView(LoginRequiredMixin, FormView):
+    form_class = MessageForm
+    template_name = 'planer/room.html'
+    prefix = 'message'
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.cleaned_data['author_id'] = self.request.user.id
+
+        r = json.loads(self.request.session['room'])[0]
+        slug = r['fields']['slug']
+        form.cleaned_data['room_id'] = r['pk']
+        m = Message.objects.create(**form.cleaned_data)
+        m.save()
+        return redirect(Room.objects.get(slug=slug))
+
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any):
+
+        return super().post(request, *args, **kwargs)

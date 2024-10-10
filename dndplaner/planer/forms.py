@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from datetime import datetime
 
 
-from .models import Room
+from .models import Room, Message
 
 
 class RoomForm(forms.ModelForm):
@@ -56,3 +56,15 @@ class DeleteRoomForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = ()
+
+
+class MessageForm(forms.ModelForm):
+    prefix = 'message'
+
+    class Meta:
+        model = Message
+        fields = ['content']
+        widgets = {
+            'content': forms.TextInput(attrs={'class': 'form-control'}),
+
+        }
